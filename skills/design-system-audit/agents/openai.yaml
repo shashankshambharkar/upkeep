@@ -1,0 +1,5 @@
+interface:
+  display_name: "Design System Audit"
+  short_description: "Measures design system adoption and reports what drifted"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,3 @@
+interface:
+  display_name: "Design Tokens"
+  short_description: "Token architecture, naming and audits for design systems"

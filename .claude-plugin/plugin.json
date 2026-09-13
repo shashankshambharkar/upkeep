@@ -1,0 +1,12 @@
+{
+  "name": "upkeep",
+  "description": "Skills for running a design system: token architecture, component API design and adoption auditing.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Shashank Shambharkar",
+    "email": "shashankshambharkar27@gmail.com"
+  },
+  "homepage": "https://shashanks.design",
+  "repository": "https://github.com/shashankuxdesign/upkeep",
+  "license": "MIT"
+}

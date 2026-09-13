@@ -1,0 +1,3 @@
+interface:
+  display_name: "Component API"
+  short_description: "Prop, variant and composition design for design system components"

@@ -1,0 +1,17 @@
+{
+  "name": "upkeep",
+  "metadata": {
+    "description": "Agent skills for design system operations: tokens, component APIs and drift."
+  },
+  "owner": {
+    "name": "Shashank Shambharkar",
+    "email": "shashankshambharkar27@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "upkeep",
+      "source": "./",
+      "description": "Skills for running a design system: token architecture, component API design and adoption auditing."
+    }
+  ]
+}
