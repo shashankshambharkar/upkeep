@@ -1,10 +1,10 @@
-# Upkeep
+# Drift
 
 Agent skills for running a design system, not just building one.
 
-[![skills.sh](https://skills.sh/b/shashankshambharkar/upkeep)](https://skills.sh/shashankshambharkar/upkeep)
+[![skills.sh](https://skills.sh/b/shashankshambharkar/drift)](https://skills.sh/shashankshambharkar/drift)
 
-A design system is maybe ten percent design and ninety percent upkeep: deciding what a token is for, keeping a component's API stable while its internals change and finding out what the codebase actually renders versus what the library documents. These skills cover that part.
+A design system doesn't fail, it drifts. A token nobody re-audited. A prop only one screen still sets. A component quietly rebuilt because nobody remembered the real one existed. These skills are what catches it: the architecture that keeps tokens and component APIs from drifting apart, and the audit that measures how far they already have.
 
 They come out of running a production design system at [Upstox](https://upstox.com), where a token set went from 240 declarations to 27 roles without anything on screen changing.
 
@@ -19,14 +19,14 @@ They come out of running a production design system at [Upstox](https://upstox.c
 ## Install
 
 ```bash
-npx skills add shashankshambharkar/upkeep
+npx skills add shashankshambharkar/drift
 ```
 
 ## Claude Code plugin
 
 ```text
-/plugin marketplace add shashankshambharkar/upkeep
-/plugin install upkeep@upkeep
+/plugin marketplace add shashankshambharkar/drift
+/plugin install drift@drift
 ```
 
 ## What each skill will not do

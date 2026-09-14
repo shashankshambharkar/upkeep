@@ -1,12 +1,12 @@
 {
-  "name": "upkeep",
+  "name": "drift",
   "description": "Skills for running a design system: token architecture, component API design and adoption auditing.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "author": {
     "name": "Shashank Shambharkar",
     "email": "shashankshambharkar27@gmail.com"
   },
   "homepage": "https://shashanks.design",
-  "repository": "https://github.com/shashankshambharkar/upkeep",
+  "repository": "https://github.com/shashankshambharkar/drift",
   "license": "MIT"
 }

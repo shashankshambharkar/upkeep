@@ -1,5 +1,5 @@
 {
-  "name": "upkeep",
+  "name": "drift",
   "metadata": {
     "description": "Agent skills for design system operations: tokens, component APIs and drift."
   },
@@ -9,7 +9,7 @@
   },
   "plugins": [
     {
-      "name": "upkeep",
+      "name": "drift",
       "source": "./",
       "description": "Skills for running a design system: token architecture, component API design and adoption auditing."
     }

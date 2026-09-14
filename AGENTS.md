@@ -4,9 +4,9 @@ This file is the single source of guidance for coding agents working in this rep
 
 ## What this repository is
 
-A collection of agent skills for design system operations: token architecture, component API design and adoption auditing. It ships two ways, via `npx skills add shashankshambharkar/upkeep` and as the Claude Code plugin `upkeep` served by the marketplace in this same repository. It is documentation-only, with no build, lint, or test tooling.
+A collection of agent skills for design system operations: token architecture, component API design and adoption auditing. It ships two ways, via `npx skills add shashankshambharkar/drift` and as the Claude Code plugin `drift` served by the marketplace in this same repository. It is documentation-only, with no build, lint, or test tooling.
 
-`.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` define the plugin and its marketplace. Both are named `upkeep`, so plugin users invoke skills as `/upkeep:design-system-audit` while skills-CLI users invoke `/design-system-audit`. Skills are discovered from `skills/` automatically, so adding one needs no manifest change.
+`.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` define the plugin and its marketplace. Both are named `drift`, so plugin users invoke skills as `/drift:design-system-audit` while skills-CLI users invoke `/design-system-audit`. Skills are discovered from `skills/` automatically, so adding one needs no manifest change.
 
 Bump `version` in `plugin.json` in the same commit as any change under `skills/`. That number is the only signal plugin users update on, and a change shipped without a bump reports "already at the latest version" and never reaches them. Run `claude plugin validate .` after touching either manifest.
 
