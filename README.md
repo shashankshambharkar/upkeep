@@ -2,7 +2,7 @@
 
 Agent skills for running a design system, not just building one.
 
-[![skills.sh](https://skills.sh/b/shashankuxdesign/upkeep)](https://skills.sh/shashankuxdesign/upkeep)
+[![skills.sh](https://skills.sh/b/shashankshambharkar/upkeep)](https://skills.sh/shashankshambharkar/upkeep)
 
 A design system is maybe ten percent design and ninety percent upkeep: deciding what a token is for, keeping a component's API stable while its internals change and finding out what the codebase actually renders versus what the library documents. These skills cover that part.
 
@@ -19,13 +19,13 @@ They come out of running a production design system at [Upstox](https://upstox.c
 ## Install
 
 ```bash
-npx skills add shashankuxdesign/upkeep
+npx skills add shashankshambharkar/upkeep
 ```
 
 ## Claude Code plugin
 
 ```text
-/plugin marketplace add shashankuxdesign/upkeep
+/plugin marketplace add shashankshambharkar/upkeep
 /plugin install upkeep@upkeep
 ```
 
