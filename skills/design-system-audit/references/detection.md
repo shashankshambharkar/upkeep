@@ -3,14 +3,20 @@
 One command per pass. Every one assumes `rg` and takes `SRC` as the consuming surface and `SYS` as the system source, set once:
 
 ```bash
-SRC="src/app src/features"      # what should be using the system
+SRC=(src/app src/features)      # what should be using the system
 SYS="src/design-system"         # the system itself, excluded from SRC
 ```
 
+`SRC` is an array, and every use of it below is `"${SRC[@]}"`. This is not style. A plain
+string expanded as `$SRC` word-splits in bash and does not in zsh, which is the default shell
+on macOS. There it becomes one path named `src/app src/features`, every pass returns zero and
+the report reads as a clean codebase.
+
 Adjust the globs to the project's stack before running. A command that returns zero because it grepped the wrong extension is the one failure mode that looks like success. Sanity-check each pass against a value you already know is there.
 
-Three portability traps, all of which fail quietly rather than loudly:
+Four portability traps, all of which fail quietly rather than loudly:
 
+- **A multi-path variable must be an array.** zsh does not word-split `$SRC`, so a string of two paths becomes one path that does not exist. Use `SRC=(a b)` and `"${SRC[@]}"`, which behave the same in both shells.
 - **Every `rg` flag goes before `--`.** Token names start with `--`, so the separator is required, and anything after it is a path. `rg -o -- 'pattern' -P src/` silently treats `-P` as a filename and the lookahead becomes a parse error.
 - **A literal search for a token name needs `-F --`.** `rg -F "--grey-500"` reads the name as a flag. `rg -F -- "--grey-500"` does not.
 - **BSD `sed` on macOS has no `\s` or `\d`.** Use `[[:space:]]` and `[[:digit:]]`, which work on both platforms.
@@ -54,19 +60,19 @@ rg --no-heading -o 'export \{ ([^}]+) \}' -r '$1' "$SYS/index.ts" \
 ```bash
 rg --no-heading --line-number \
   '#[0-9a-fA-F]{3,8}\b|\brgba?\([^)]*\)|\bhsla?\([^)]*\)|\boklch\([^)]*\)' \
-  $SRC -g '!*.test.*' -g '!*.stories.*' -g '!*.svg' \
+  "${SRC[@]}" -g '!*.test.*' -g '!*.stories.*' -g '!*.svg' \
   > findings-color.txt
 
 rg --no-heading --line-number \
   '(?:padding|margin|gap|border-radius|top|left|right|bottom)\s*:\s*\d+px' \
-  $SRC -g '!*.test.*' \
+  "${SRC[@]}" -g '!*.test.*' \
   > findings-space.txt
 ```
 
 Tailwind projects need the arbitrary-value form instead, which is where hardcoding hides:
 
 ```bash
-rg --no-heading --line-number '\[(#[0-9a-fA-F]{3,8}|\d+px|rgba?\([^]]*\))\]' $SRC
+rg --no-heading --line-number '\[(#[0-9a-fA-F]{3,8}|\d+px|rgba?\([^]]*\))\]' "${SRC[@]}"
 ```
 
 Three exclusions before counting. `0px` and `1px` are frequently correct and rarely tokenised. Values inside an SVG `fill` are artwork. And a color inside the system's own primitive declarations is the ramp, not a bypass.
@@ -78,7 +84,7 @@ A primitive referenced anywhere outside the token file. Match the project's prim
 ```bash
 rg --no-heading --line-number \
   'var\(--(grey|gray|blue|red|green|amber|purple|space|duration|ease)-[0-9a-z]+\)' \
-  $SRC "$SYS" -g '!**/tokens.css'
+  "${SRC[@]}" "$SYS" -g '!**/tokens.css'
 ```
 
 Every hit is a component reaching past the semantic tier. Report the count and the distinct tokens separately: fifty hits on one token is one missing role, and fifty hits on fifty tokens is no semantic tier at all.
@@ -88,7 +94,7 @@ Every hit is a component reaching past the semantic tier. Report the count and t
 Not a grep, a join. Take the distinct hardcoded values from pass 1, map each to the role it fills at its call site, then check that role against the `design-tokens` role inventory.
 
 ```bash
-rg --no-heading -o '#[0-9a-fA-F]{3,8}' $SRC | sort | uniq -c | sort -rn | head -30
+rg --no-heading -o '#[0-9a-fA-F]{3,8}' "${SRC[@]}" | sort | uniq -c | sort -rn | head -30
 ```
 
 Work the frequent ones first. A color appearing 40 times is a role the system does not cover, and the 1-occurrence tail is mostly genuine one-offs.
@@ -105,7 +111,7 @@ A match means bypass and the owner is the consuming team. No match means gap and
 
 ```bash
 while read -r name; do
-  n=$(rg --count-matches --no-filename -F -- "$name" $SRC "$SYS" 2>/dev/null | paste -sd+ - | bc)
+  n=$(rg --count-matches --no-filename -F -- "$name" "${SRC[@]}" "$SYS" 2>/dev/null | paste -sd+ - | bc)
   [ "${n:-0}" -le 1 ] && echo "DEAD $name"
 done < tokens.txt
 ```
@@ -129,7 +135,7 @@ Local implementations of a pattern the system already exports. Search for the sy
 
 ```bash
 while read -r c; do
-  rg --no-heading --line-number "(function|const) $c\b|class $c\b" $SRC \
+  rg --no-heading --line-number "(function|const) $c\b|class $c\b" "${SRC[@]}" \
     | rg -v "$SYS" | sed "s/^/SHADOW $c: /"
 done < components.txt
 ```
@@ -137,7 +143,7 @@ done < components.txt
 Then catch the ones under different names, by shape rather than by name:
 
 ```bash
-rg --no-heading --line-number -c '<button[^>]*className' $SRC | sort -t: -k2 -rn | head -20
+rg --no-heading --line-number -c '<button[^>]*className' "${SRC[@]}" | sort -t: -k2 -rn | head -20
 ```
 
 A file with many raw styled `button` elements is a shadow Button whatever it is called. The same heuristic works for raw `input`, `dialog` and `table`.
@@ -150,7 +156,7 @@ For each exported component, count the distinct files setting each prop:
 
 ```bash
 COMPONENT="Button"
-rg --no-heading -oUP --multiline -r '$1' -- "<$COMPONENT[^>]*?\b([a-zA-Z]+)=" $SRC \
+rg --no-heading -oUP --multiline -r '$1' -- "<$COMPONENT[^>]*?\b([a-zA-Z]+)=" "${SRC[@]}" \
   | sed 's/^[^:]*://' | sort | uniq -c | sort -n | awk '$1 <= 1'
 ```
 
@@ -159,7 +165,7 @@ Each result is a prop exactly one call site sets, which `component-api` treats a
 ## Pass 8: bypassed imports
 
 ```bash
-rg --no-heading --line-number -P -- "from ['\"].*design-system/(?!index)" $SRC
+rg --no-heading --line-number -P -- "from ['\"].*design-system/(?!index)" "${SRC[@]}"
 ```
 
 Deep imports skip the entry point, so they reach internals that were never API and they survive no refactor. Count them separately from other bypasses, because the remediation is a single find-and-replace rather than a redesign.

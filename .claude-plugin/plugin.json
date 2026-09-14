@@ -1,7 +1,7 @@
 {
   "name": "upkeep",
   "description": "Skills for running a design system: token architecture, component API design and adoption auditing.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
     "name": "Shashank Shambharkar",
     "email": "shashankshambharkar27@gmail.com"
